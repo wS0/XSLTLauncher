@@ -49,5 +49,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="data\data1.xml" />
+    <Content Include="data\data1_to_Employees.xsl" />
+    <Content Include="data\data2.xml" />
+    <Content Include="data\data2_to_Employees.xsl" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
