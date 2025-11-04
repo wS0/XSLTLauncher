@@ -18,6 +18,8 @@ namespace XSLTLauncher
                 Transform(args[0], args[1]);
                 //2.2
                 AddEmployeeSalaryAmount("result.xml");
+                //2.3
+                AddPayTotalAmont(args[0]);
             }
             else
             {
@@ -91,6 +93,40 @@ namespace XSLTLauncher
 
             // Сохраняем в файл:
             doc.Save("employees_with_total.xml");
+        }
+
+        public static void AddPayTotalAmont(string sXmlPath)
+        {
+            //load the Xml doc
+            XDocument doc = XDocument.Load(sXmlPath);
+
+            // Используем InvariantCulture
+            var inv = CultureInfo.InvariantCulture;
+
+            double total = 0.0;
+
+            foreach (var item in doc.Root.Elements("item"))
+            {
+                string amountStr = item.Attribute("amount").Value;
+
+                // Заменяем запятую на точку, чтобы double.Parse понял любой вариант
+                amountStr = amountStr.Replace(',', '.');
+
+                if (double.TryParse(amountStr, NumberStyles.Any, inv, out double amount))
+                {
+                    total += amount;
+                }
+                else
+                {
+                    Console.WriteLine($"Не удалось распознать amount: {amountStr}");
+                }
+            }
+
+            // Добавляем атрибут total к <Pay>
+            doc.Root.SetAttributeValue("total", total.ToString("F2", inv));
+
+            // Сохраняем в файл:
+            doc.Save("pay_with_total.xml");
         }
     }
 }
